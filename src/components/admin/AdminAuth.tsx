@@ -14,13 +14,23 @@ const AdminAuth = () => {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     try {
-      await signIn(email, password);
-      navigate("/admin");
-    } catch (error) {
+      const { user, session } = await signIn(email, password);
+      if (user && session) {
+        window.location.href = "/admin";
+      } else {
+        toast({
+          variant: "destructive",
+          title: "Authentication failed",
+          description: "Please check your credentials and try again.",
+        });
+      }
+    } catch (error: any) {
+      console.error("Auth error:", error);
       toast({
         variant: "destructive",
         title: "Authentication failed",
-        description: "Please check your credentials and try again.",
+        description:
+          error?.message || "Please check your credentials and try again.",
       });
     }
   };

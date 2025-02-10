@@ -1,11 +1,27 @@
 import { motion } from "framer-motion";
 import { Link } from "react-router-dom";
+import { useEffect, useState } from "react";
+import { getCurrentUser } from "@/lib/auth";
+import type { User } from "@supabase/supabase-js";
 
 interface NavbarProps {
   isHome?: boolean;
 }
 
 const Navbar = ({ isHome = false }: NavbarProps) => {
+  const [user, setUser] = useState<User | null>(null);
+
+  useEffect(() => {
+    const checkUser = async () => {
+      try {
+        const currentUser = await getCurrentUser();
+        setUser(currentUser);
+      } catch (error) {
+        console.error("Error checking user:", error);
+      }
+    };
+    checkUser();
+  }, []);
   return (
     <motion.nav
       initial={isHome ? { y: -100 } : { opacity: 0 }}
@@ -30,9 +46,11 @@ const Navbar = ({ isHome = false }: NavbarProps) => {
           <Link to="/social" className="hover:text-white">
             Social
           </Link>
-          <Link to="/admin" className="hover:text-white">
-            Admin
-          </Link>
+          {user && (
+            <Link to="/admin" className="hover:text-white">
+              Admin
+            </Link>
+          )}
         </div>
         <Link
           to="/contact"

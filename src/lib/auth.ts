@@ -6,7 +6,7 @@ export const signIn = async (email: string, password: string) => {
     password,
   });
   if (error) throw error;
-  return data;
+  return { user: data.user, session: data.session };
 };
 
 export const signOut = async () => {

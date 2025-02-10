@@ -27,7 +27,7 @@ const AdminDashboard = () => {
   const handleSignOut = async () => {
     try {
       await signOut();
-      navigate("/admin");
+      window.location.href = "/admin";
     } catch (error) {
       toast({
         variant: "destructive",

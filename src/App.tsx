@@ -25,7 +25,7 @@ function App() {
           {import.meta.env.VITE_TEMPO === "true" && useRoutes(routes)}
           <Routes>
             <Route path="/" element={<Home />} />
-            <Route path="/project/:id" element={<ProjectDetail />} />
+            <Route path="/project/:slug" element={<ProjectDetail />} />
             <Route path="/work" element={<Work />} />
             <Route path="/about" element={<About />} />
             <Route path="/social" element={<Social />} />

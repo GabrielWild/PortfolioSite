@@ -1,6 +1,7 @@
 import { motion } from "framer-motion";
 import { Link } from "react-router-dom";
 import { useEffect, useState } from "react";
+import { Menu, X } from "lucide-react";
 import { getCurrentUser } from "@/lib/auth";
 import type { User } from "@supabase/supabase-js";
 
@@ -10,6 +11,7 @@ interface NavbarProps {
 
 const Navbar = ({ isHome = false }: NavbarProps) => {
   const [user, setUser] = useState<User | null>(null);
+  const [isMenuOpen, setIsMenuOpen] = useState(false);
 
   useEffect(() => {
     const checkUser = async () => {
@@ -22,6 +24,9 @@ const Navbar = ({ isHome = false }: NavbarProps) => {
     };
     checkUser();
   }, []);
+
+  const toggleMenu = () => setIsMenuOpen(!isMenuOpen);
+
   return (
     <motion.nav
       initial={isHome ? { y: -100 } : { opacity: 0 }}
@@ -36,7 +41,17 @@ const Navbar = ({ isHome = false }: NavbarProps) => {
         >
           G. WILDSMITH
         </Link>
-        <div className="flex items-center gap-12 text-sm font-medium uppercase tracking-wider text-white/80">
+
+        {/* Mobile menu button */}
+        <button
+          onClick={toggleMenu}
+          className="md:hidden text-white hover:text-white/80"
+        >
+          {isMenuOpen ? <X size={24} /> : <Menu size={24} />}
+        </button>
+
+        {/* Desktop menu */}
+        <div className="hidden md:flex items-center gap-12 text-sm font-medium uppercase tracking-wider text-white/80">
           <Link to="/work" className="hover:text-white">
             Work
           </Link>
@@ -52,13 +67,45 @@ const Navbar = ({ isHome = false }: NavbarProps) => {
             </Link>
           )}
         </div>
+
         <Link
           to="/contact"
-          className="text-sm font-medium uppercase tracking-wider text-white hover:text-white/80"
+          className="hidden md:block text-sm font-medium uppercase tracking-wider text-white hover:text-white/80"
         >
           Contact
         </Link>
       </div>
+
+      {/* Mobile menu */}
+      {isMenuOpen && (
+        <motion.div
+          initial={{ opacity: 0, y: -20 }}
+          animate={{ opacity: 1, y: 0 }}
+          exit={{ opacity: 0, y: -20 }}
+          transition={{ duration: 0.2 }}
+          className="md:hidden absolute left-0 right-0 top-full mt-2 bg-black/90 backdrop-blur-md py-4"
+        >
+          <div className="flex flex-col items-center gap-4 text-sm font-medium uppercase tracking-wider text-white/80">
+            <Link to="/work" className="hover:text-white py-2">
+              Work
+            </Link>
+            <Link to="/about" className="hover:text-white py-2">
+              About
+            </Link>
+            <Link to="/social" className="hover:text-white py-2">
+              Social
+            </Link>
+            {user && (
+              <Link to="/admin" className="hover:text-white py-2">
+                Admin
+              </Link>
+            )}
+            <Link to="/contact" className="hover:text-white py-2">
+              Contact
+            </Link>
+          </div>
+        </motion.div>
+      )}
     </motion.nav>
   );
 };

@@ -51,39 +51,30 @@ const Work = () => {
     <PageTransition>
       <div className="min-h-screen bg-black">
         <Navbar />
-        <div className="container mx-auto px-4 pt-32">
-          <div className="grid grid-cols-1 gap-8 md:grid-cols-2 lg:grid-cols-3">
-            {projects.map((project) => (
-              <div
-                key={project.id}
-                className="block cursor-pointer"
-                onClick={() => navigate(`/project/${slugify(project.title)}`)}
+        <div className="grid grid-cols-1 gap-4 p-4 sm:grid-cols-2 md:grid-cols-3">
+          {projects.map((project) => (
+            <Link
+              key={project.id}
+              to={`/project/${slugify(project.title)}`}
+              className="group relative aspect-square overflow-hidden rounded-lg bg-black"
+            >
+              <img
+                src={project.thumbnail_url}
+                alt={project.title}
+                className="h-full w-full object-cover transition-opacity duration-500"
+              />
+              <video
+                className="absolute inset-0 h-full w-full object-cover"
+                muted
+                loop
+                playsInline
+                autoPlay
               >
-                <motion.div
-                  initial={{ opacity: 0, y: 20 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ duration: 0.5 }}
-                  className="group"
-                >
-                  <div className="aspect-square overflow-hidden">
-                    <img
-                      src={project.thumbnail_url}
-                      alt={project.title}
-                      className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105"
-                    />
-                  </div>
-                  <div className="mt-4 flex items-center justify-between">
-                    <h3 className="text-lg font-medium uppercase tracking-wider text-white">
-                      {project.title}
-                    </h3>
-                    <p className="text-sm font-medium uppercase tracking-wider text-white/60">
-                      {project.client}
-                    </p>
-                  </div>
-                </motion.div>
-              </div>
-            ))}
-          </div>
+                <source src={project.video_url} type="video/mp4" />
+              </video>
+              <div className="absolute inset-0 bg-black/20 opacity-0 transition-opacity duration-300 group-hover:opacity-100" />
+            </Link>
+          ))}
         </div>
       </div>
     </PageTransition>

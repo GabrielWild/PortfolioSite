@@ -63,7 +63,7 @@ const About = () => {
 
   return (
     <PageTransition>
-      <div className="min-h-screen bg-black">
+      <div className="relative min-h-screen bg-white">
         <Navbar />
         <motion.div
           initial={{ opacity: 0, y: 20 }}
@@ -72,10 +72,10 @@ const About = () => {
           className="container mx-auto px-4 pt-32"
         >
           <div className="mx-auto max-w-3xl">
-            <h1 className="mb-8 text-4xl font-bold uppercase tracking-wider text-white">
+            <h1 className="mb-8 text-4xl font-bold uppercase tracking-wider text-zinc-900">
               About Me
             </h1>
-            <div className="space-y-6 text-lg leading-relaxed text-white/80">
+            <div className="space-y-6 text-lg leading-relaxed text-zinc-600">
               <p>
                 With over a decade of experience in visual storytelling, I've
                 dedicated my career to capturing life's most meaningful moments
@@ -100,7 +100,7 @@ const About = () => {
 
             {/* Equipment Section */}
             <div className="mt-16">
-              <h2 className="mb-8 text-2xl font-bold uppercase tracking-wider text-white">
+              <h2 className="mb-8 text-2xl font-bold uppercase tracking-wider text-zinc-900">
                 Equipment & Gear
               </h2>
               {loading ? (
@@ -123,22 +123,22 @@ const About = () => {
                       initial={{ opacity: 0, y: 20 }}
                       animate={{ opacity: 1, y: 0 }}
                       transition={{ duration: 0.5 }}
-                      className="rounded-lg bg-white/5 p-6 backdrop-blur-sm"
+                      className="rounded-lg bg-zinc-50 p-6"
                     >
-                      <h3 className="mb-4 text-xl font-semibold uppercase tracking-wider text-white">
+                      <h3 className="mb-4 text-xl font-semibold uppercase tracking-wider text-zinc-900">
                         {category}
                       </h3>
                       <div className="grid gap-4 md:grid-cols-2">
                         {items.map((item) => (
                           <div
                             key={item.id}
-                            className="rounded-md bg-white/5 p-4"
+                            className="rounded-md bg-white p-4 shadow-sm"
                           >
-                            <h4 className="font-medium text-white">
+                            <h4 className="font-medium text-zinc-900">
                               {item.name}
                             </h4>
                             {item.description && (
-                              <p className="mt-1 text-sm text-white/60">
+                              <p className="mt-1 text-sm text-zinc-500">
                                 {item.description}
                               </p>
                             )}

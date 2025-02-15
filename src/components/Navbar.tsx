@@ -32,49 +32,24 @@ const Navbar = ({ isHome = false }: NavbarProps) => {
       initial={isHome ? { y: -100 } : { opacity: 0 }}
       animate={isHome ? { y: 0 } : { opacity: 1 }}
       transition={{ duration: 0.5 }}
-      className="fixed top-0 z-50 w-full bg-transparent px-8 py-6"
+      className="fixed left-0 right-0 top-0 z-50 flex justify-between px-8 py-6"
     >
-      <div className="flex items-center justify-between">
-        <Link
-          to="/"
-          className="text-sm font-medium uppercase tracking-wider text-white"
-        >
-          G. WILDSMITH
+      <div className="flex items-center gap-8">
+        <Link to="/work" className="text-sm text-white/70 hover:text-white">
+          WORKS
         </Link>
-
-        {/* Mobile menu button */}
-        <button
-          onClick={toggleMenu}
-          className="md:hidden text-white hover:text-white/80"
-        >
-          {isMenuOpen ? <X size={24} /> : <Menu size={24} />}
-        </button>
-
-        {/* Desktop menu */}
-        <div className="hidden md:flex items-center gap-12 text-sm font-medium uppercase tracking-wider text-white/80">
-          <Link to="/work" className="hover:text-white">
-            Work
-          </Link>
-          <Link to="/about" className="hover:text-white">
-            About
-          </Link>
-          <Link to="/social" className="hover:text-white">
-            Social
-          </Link>
-          {user && (
-            <Link to="/admin" className="hover:text-white">
-              Admin
-            </Link>
-          )}
-        </div>
-
-        <Link
-          to="/contact"
-          className="hidden md:block text-sm font-medium uppercase tracking-wider text-white hover:text-white/80"
-        >
-          Contact
+        <Link to="/about" className="text-sm text-white/70 hover:text-white">
+          ABOUT
         </Link>
+        {user && (
+          <Link to="/admin" className="text-sm text-white/70 hover:text-white">
+            ADMIN
+          </Link>
+        )}
       </div>
+      <Link to="/contact" className="text-sm text-white/70 hover:text-white">
+        LET'S TALK
+      </Link>
 
       {/* Mobile menu */}
       {isMenuOpen && (
@@ -85,23 +60,20 @@ const Navbar = ({ isHome = false }: NavbarProps) => {
           transition={{ duration: 0.2 }}
           className="md:hidden absolute left-0 right-0 top-full mt-2 bg-black/90 backdrop-blur-md py-4"
         >
-          <div className="flex flex-col items-center gap-4 text-sm font-medium uppercase tracking-wider text-white/80">
-            <Link to="/work" className="hover:text-white py-2">
-              Work
+          <div className="flex flex-col items-center gap-4 text-sm uppercase tracking-wider">
+            <Link to="/work" className="text-white/70 hover:text-white py-2">
+              WORKS
             </Link>
-            <Link to="/about" className="hover:text-white py-2">
-              About
-            </Link>
-            <Link to="/social" className="hover:text-white py-2">
-              Social
+            <Link to="/about" className="text-white/70 hover:text-white py-2">
+              ABOUT
             </Link>
             {user && (
-              <Link to="/admin" className="hover:text-white py-2">
-                Admin
+              <Link to="/admin" className="text-white/70 hover:text-white py-2">
+                ADMIN
               </Link>
             )}
-            <Link to="/contact" className="hover:text-white py-2">
-              Contact
+            <Link to="/contact" className="text-white/70 hover:text-white py-2">
+              LET'S TALK
             </Link>
           </div>
         </motion.div>

@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useCallback } from "react";
+import React, { useState, useEffect, useCallback, useRef } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { useNavigate } from "react-router-dom";
 import VideoThumbnail from "./VideoThumbnail";
@@ -9,12 +9,18 @@ interface VideoGridProps {
   videos?: Video[];
 }
 
+const INITIAL_LOAD_COUNT = 6;
+const LOAD_MORE_COUNT = 3;
+
 const VideoGrid = ({ videos = [] }: VideoGridProps) => {
   const [currentIndex, setCurrentIndex] = useState(0);
+  const [visibleCount, setVisibleCount] = useState(INITIAL_LOAD_COUNT);
   const [preloadedVideos, setPreloadedVideos] = useState<{
     [key: string]: boolean;
   }>({});
   const [nextVideoLoaded, setNextVideoLoaded] = useState(false);
+  const observerRef = useRef<IntersectionObserver | null>(null);
+  const loadMoreRef = useRef<HTMLDivElement>(null);
 
   const preloadVideo = useCallback(
     (index: number) => {
@@ -52,6 +58,26 @@ const VideoGrid = ({ videos = [] }: VideoGridProps) => {
     },
     [videos, currentIndex, preloadedVideos],
   );
+
+  useEffect(() => {
+    if (!loadMoreRef.current) return;
+
+    observerRef.current = new IntersectionObserver(
+      (entries) => {
+        if (entries[0].isIntersecting && visibleCount < videos.length) {
+          setVisibleCount((prev) =>
+            Math.min(prev + LOAD_MORE_COUNT, videos.length),
+          );
+        }
+      },
+      { threshold: 0.1 },
+    );
+
+    observerRef.current.observe(loadMoreRef.current);
+
+    return () => observerRef.current?.disconnect();
+  }, [visibleCount, videos.length]);
+
   const navigate = useNavigate();
 
   const handleVideoEnd = useCallback(() => {
@@ -85,29 +111,35 @@ const VideoGrid = ({ videos = [] }: VideoGridProps) => {
   return (
     <div className="fixed inset-0 h-screen w-screen overflow-hidden bg-black">
       <AnimatePresence mode="wait">
-        {videos.length > 0 && (
+        {videos.slice(0, visibleCount).map((video, index) => (
           <motion.div
-            key={currentIndex}
+            key={video.id}
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
-            transition={{ duration: 1 }}
+            transition={{ duration: 0.5 }}
             className="h-full w-full cursor-pointer"
             onClick={handleVideoClick}
           >
             <VideoThumbnail
-              id={videos[currentIndex].id}
-              thumbnail_url={videos[currentIndex].thumbnail_url}
-              video_url={videos[currentIndex].video_url}
-              mobile_thumbnail_url={videos[currentIndex].mobile_thumbnail_url}
-              mobile_video_url={videos[currentIndex].mobile_video_url}
-              title={videos[currentIndex].title}
-              client={videos[currentIndex].client}
-              onVideoEnd={handleVideoEnd}
+              thumbnailUrl={video.thumbnail_url}
+              videoUrl={video.video_url}
+              title={video.title}
+              client={video.client}
+              onLoad={() => {
+                if (index === currentIndex + 1) {
+                  setNextVideoLoaded(true);
+                }
+              }}
             />
           </motion.div>
-        )}
+        ))}
       </AnimatePresence>
+
+      {/* Load more trigger */}
+      {visibleCount < videos.length && (
+        <div ref={loadMoreRef} className="h-10 w-full" />
+      )}
 
       {/* Slideshow numbers */}
       {videos.length > 0 && (
@@ -119,7 +151,7 @@ const VideoGrid = ({ videos = [] }: VideoGridProps) => {
                 e.stopPropagation(); // Prevent video click when clicking numbers
                 setCurrentIndex(index);
               }}
-              className={`text-xl md:text-2xl font-medium ${index === currentIndex ? "text-white" : "text-white/40"}`}
+              className={`text-xl font-medium md:text-2xl ${index === currentIndex ? "text-white" : "text-white/40"}`}
             >
               {(index + 1).toString().padStart(2, "0")}
             </button>

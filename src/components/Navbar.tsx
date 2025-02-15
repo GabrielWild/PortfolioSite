@@ -7,9 +7,10 @@ import type { User } from "@supabase/supabase-js";
 
 interface NavbarProps {
   isHome?: boolean;
+  isDark?: boolean;
 }
 
-const Navbar = ({ isHome = false }: NavbarProps) => {
+const Navbar = ({ isHome = false, isDark = true }: NavbarProps) => {
   const [user, setUser] = useState<User | null>(null);
   const [isMenuOpen, setIsMenuOpen] = useState(false);
 
@@ -27,6 +28,10 @@ const Navbar = ({ isHome = false }: NavbarProps) => {
 
   const toggleMenu = () => setIsMenuOpen(!isMenuOpen);
 
+  const textColorClasses = isDark
+    ? "text-white/70 hover:text-white"
+    : "text-zinc-600 hover:text-zinc-900";
+
   return (
     <motion.nav
       initial={isHome ? { y: -100 } : { opacity: 0 }}
@@ -35,19 +40,19 @@ const Navbar = ({ isHome = false }: NavbarProps) => {
       className="fixed left-0 right-0 top-0 z-50 flex justify-between px-8 py-6"
     >
       <div className="flex items-center gap-8">
-        <Link to="/work" className="text-sm text-white/70 hover:text-white">
+        <Link to="/works" className={`text-sm ${textColorClasses}`}>
           WORKS
         </Link>
-        <Link to="/about" className="text-sm text-white/70 hover:text-white">
+        <Link to="/about" className={`text-sm ${textColorClasses}`}>
           ABOUT
         </Link>
         {user && (
-          <Link to="/admin" className="text-sm text-white/70 hover:text-white">
+          <Link to="/admin" className={`text-sm ${textColorClasses}`}>
             ADMIN
           </Link>
         )}
       </div>
-      <Link to="/contact" className="text-sm text-white/70 hover:text-white">
+      <Link to="/contact" className={`text-sm ${textColorClasses}`}>
         LET'S TALK
       </Link>
 
@@ -58,21 +63,21 @@ const Navbar = ({ isHome = false }: NavbarProps) => {
           animate={{ opacity: 1, y: 0 }}
           exit={{ opacity: 0, y: -20 }}
           transition={{ duration: 0.2 }}
-          className="md:hidden absolute left-0 right-0 top-full mt-2 bg-black/90 backdrop-blur-md py-4"
+          className={`absolute left-0 right-0 top-full mt-2 py-4 backdrop-blur-md md:hidden ${isDark ? "bg-black/90" : "bg-white/90"}`}
         >
           <div className="flex flex-col items-center gap-4 text-sm uppercase tracking-wider">
-            <Link to="/work" className="text-white/70 hover:text-white py-2">
+            <Link to="/works" className={`py-2 ${textColorClasses}`}>
               WORKS
             </Link>
-            <Link to="/about" className="text-white/70 hover:text-white py-2">
+            <Link to="/about" className={`py-2 ${textColorClasses}`}>
               ABOUT
             </Link>
             {user && (
-              <Link to="/admin" className="text-white/70 hover:text-white py-2">
+              <Link to="/admin" className={`py-2 ${textColorClasses}`}>
                 ADMIN
               </Link>
             )}
-            <Link to="/contact" className="text-white/70 hover:text-white py-2">
+            <Link to="/contact" className={`py-2 ${textColorClasses}`}>
               LET'S TALK
             </Link>
           </div>

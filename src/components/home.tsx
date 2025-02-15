@@ -85,7 +85,7 @@ const Home = () => {
             delay: 0.2,
             ease: [0.22, 1, 0.36, 1],
           }}
-          className="mt-4 flex justify-center gap-32"
+          className="mt-4 flex flex-col items-center gap-8 md:flex-row md:justify-center md:gap-32"
         >
           <p className="text-center text-xs uppercase tracking-wider text-white/50">
             CINEMATOGRAPHY STUDIO

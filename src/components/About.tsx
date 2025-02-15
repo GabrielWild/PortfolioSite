@@ -64,7 +64,7 @@ const About = () => {
   return (
     <PageTransition>
       <div className="relative min-h-screen bg-white">
-        <Navbar />
+        <Navbar isHome={true} isDark={false} />
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
